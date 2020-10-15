@@ -1,0 +1,38 @@
+version: "3"
+volumes:
+  tmp-shared:
+services:
+  lineman_api:
+    build:
+      context: lineman_api
+      dockerfile: Dockerfile
+    ports:
+     - "5002:5002"
+    depends_on:
+      - redis
+  celery_queue:
+    build:
+      context: celery_queue
+      dockerfile: Dockerfile
+    volumes:
+      - tmp-shared:/tmp
+    depends_on:
+      - redis
+  celery_train:
+    build:
+      context: celery_train
+      dockerfile: Dockerfile
+    volumes:
+      - tmp-shared:/tmp
+    depends_on:
+      - redis
+  redis:
+    image: redis
+    ports:
+      - "127.0.0.1:6379:6379"
+#  stations_db:
+#    build:
+#      context: db_storage
+#      dockerfile: Dockerfile
+#    ports:
+#      - "127.0.0.1:5442:5432"
