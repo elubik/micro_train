@@ -1,7 +1,7 @@
 import random
 from datetime import timedelta
 
-from celery_queue.tasks import celery_app
+from app.celery_queue.tasks import celery_app
 
 STATIONS = [
     "Warszawa Zachodnia",

@@ -1,12 +1,3 @@
-from celery.result import AsyncResult
-from celery import Celery
-from time import sleep
-import os
-import random
-
-from celery_queue.tasks import celery_app
-
-
 class TestTrain:
     def test_empty(self):
         assert True
