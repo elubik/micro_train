@@ -2,14 +2,14 @@ version: "3"
 volumes:
   tmp-shared:
 services:
-  lineman_api:
-    build:
-      context: lineman_api
-      dockerfile: Dockerfile
-    ports:
-     - "5002:5002"
-    depends_on:
-      - redis
+#  lineman_api:
+#    build:
+#      context: lineman_api
+#      dockerfile: Dockerfile
+#    ports:
+#     - "5002:5002"
+#    depends_on:
+#      - redis
   celery_queue:
     build:
       context: celery_queue
@@ -24,8 +24,11 @@ services:
       dockerfile: Dockerfile
     volumes:
       - tmp-shared:/tmp
+    environment:
+      - PYTHONPATH="$PYTHONPATH:/celery_queue"
     depends_on:
       - redis
+      - celery_queue
   redis:
     image: redis
     ports:
