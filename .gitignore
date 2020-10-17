@@ -1,2 +1,5 @@
 .idea
 *.pyc
+app/logfiles/*
+app/celerybeat-schedule
+app/celerybeat.pid
