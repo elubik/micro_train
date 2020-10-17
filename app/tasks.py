@@ -1,4 +1,4 @@
-from app.worker import celery_app
+from worker import celery_app
 
 
 def set_file_name_by_speed(speed):

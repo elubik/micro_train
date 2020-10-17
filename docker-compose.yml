@@ -9,7 +9,6 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - TRAIN_SPEED_SCHEDULE=10
       - STATIONS_SCHEDULE=180
-      - PYTHONPATH=:/app
     depends_on:
       - beat
       - rabbitmq
