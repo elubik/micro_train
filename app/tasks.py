@@ -1,3 +1,7 @@
+import os
+from celery import states
+from celery.exceptions import Ignore
+
 from worker import celery_app
 
 
@@ -11,13 +15,29 @@ def set_file_name_by_speed(speed):
 
 
 @celery_app.task(bind=True, name='post_train_speed', queue='train_beat')
-def post_train_speed(train_speed):
-    file_name = set_file_name_by_speed(train_speed)
-    file = open(file_name, 'a')
-    file.write(train_speed)
-    file.close()
+def post_train_speed(self, train_speed):
+    try:
+        file_name = set_file_name_by_speed(train_speed)
+        with open(os.path.join(os.environ['LOG_FILES_PATH'], file_name), "a") as file:
+            file.write(str(train_speed)+"\n")
+            file.close()
+        return train_speed
+
+    except Exception as e:
+        raise TaskFailure(self, e)
 
 
 @celery_app.task(bind=True, name='post_train_near_station', queue='train_beat')
-def post_train_near_station(station):
+def post_train_near_station(self, station):
     return station
+
+
+class TaskFailure(Exception):
+    def __init__(self, task, exception):
+        task.update_state(
+            state=states.FAILURE,
+            meta={
+                'exc_message': (type(exception).__name__, ),
+                'custom': '', 'exc_type': '',
+            })
+        raise Ignore()

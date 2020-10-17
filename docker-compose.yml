@@ -9,24 +9,27 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - TRAIN_SPEED_SCHEDULE=10
       - STATIONS_SCHEDULE=180
+      - LOG_FILES_PATH=/app/logfiles
     depends_on:
       - beat
-      - rabbitmq
+      - redis
     restart: 'no'
     volumes:
       - ./app:/app
-      - worker:/logfiles
+      - worker:/app/logfiles
   beat:
     build: .
     image: *img
     command: [celery, beat, --app=worker.celery_app, --loglevel=INFO]
     environment: *env
     depends_on:
-      - rabbitmq
+      - redis
     restart: 'no'
     volumes:
       - ./app:/app
-  rabbitmq:
-    image: rabbitmq:3.7.8
+  redis:
+    image: redis
+    ports:
+      - "127.0.0.1:6379:6379"
 volumes:
   worker:

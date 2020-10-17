@@ -2,6 +2,7 @@ from tempfile import NamedTemporaryFile
 from celery.exceptions import Ignore
 from celery import Celery, states
 from kombu import Queue
+from datetime import timedelta
 from zipfile import ZipFile
 import requests
 import imghdr
@@ -45,7 +46,7 @@ celery_app.conf.task_queues = (
 celery_app.conf.beat_schedule = {
     "post-train-speed-every-10-seconds": {
         "task": "post_train_speed",
-        "schedule": float(os.environ['TRAIN_SPEED_SCHEDULE']),
+        "schedule": timedelta(seconds=int(os.environ['TRAIN_SPEED_SCHEDULE'])),
         "args": [round(random.uniform(0, 180), 2)],
         "options": {
             "queue": "train_beat"
@@ -53,7 +54,7 @@ celery_app.conf.beat_schedule = {
     },
     "post-train-speed-every-180-seconds": {
         "task": "post_train_near_station",
-        "schedule": float(os.environ['STATIONS_SCHEDULE']),
+        "schedule": timedelta(seconds=int(os.environ['STATIONS_SCHEDULE'])),
         "args": [random.choice(STATIONS)],
         "options": {
             "queue": "train_beat"
