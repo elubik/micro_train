@@ -48,4 +48,5 @@ Rozwiązanie zostało zaimplementowane w oparciu o 4 kontenery:
  * Baza kolejki zadań - wykorzystująca Redis
  
 Do zmiany:
+ * naprawić błąd importu celery_app pomiędzy kontenerami
  * dodać testy dla Celery Beat
