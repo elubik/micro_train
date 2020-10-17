@@ -41,11 +41,11 @@ Run tests on Celery containter
 docker exec -it e2cdb31c2418 pytest test_tasks.py -vvv
 ```
 ## Summary [PL]
-Rozwiązanie zostało zaimplementowane w oparciu o 4 kontenery:
- * API - stworzone z wykorzystaniem frameworku Flask
+Rozwiązanie zostało zaimplementowane w oparciu o 3 kontenery:
  * Scheduler zadań - oparty na Celery Beat
  * Worker kolejki zadań - oparty na Celery
- * Baza kolejki zadań - wykorzystująca Redis
+ * Baza kolejki zadań - wykorzystująca Rabbit
  
 Do zmiany:
- * dodać testy dla Celery Beat
+ * nie startują kontenery celery - problem z dostępem do modułu
+ * dodać LINEMAN API
