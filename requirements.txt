@@ -6,6 +6,8 @@ billiard==3.6.1
 celery==4.4.0
 certifi==2019.6.16
 chardet==3.0.4
+gevent==1.2.2
+gevent-websocket==0.10.1
 idna==2.8
 importlib-metadata==2.0.0
 kombu==4.6.11

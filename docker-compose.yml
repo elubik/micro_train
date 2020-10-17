@@ -1,41 +1,32 @@
-version: "3"
-volumes:
-  tmp-shared:
+version: '3.4'
 services:
-#  lineman_api:
-#    build:
-#      context: lineman_api
-#      dockerfile: Dockerfile
-#    ports:
-#     - "5002:5002"
-#    depends_on:
-#      - redis
-  celery_queue:
-    build:
-      context: celery_queue
-      dockerfile: Dockerfile
-    volumes:
-      - tmp-shared:/tmp
+  worker:
+    build: .
+    image: &img worker
+    command: [celery, worker, --app=worker, --pool=gevent, --concurrency=20, --loglevel=INFO]
+    environment: &env
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - TRAIN_SPEED_SCHEDULE=10
+      - STATIONS_SCHEDULE=180
     depends_on:
-      - redis
-  celery_train:
-    build:
-      context: celery_train
-      dockerfile: Dockerfile
+      - beat
+      - rabbitmq
+    restart: 'no'
     volumes:
-      - tmp-shared:/tmp
-    environment:
-      - PYTHONPATH="$PYTHONPATH:/celery_queue"
+      - ./app:/app
+      - worker:/logfiles
+  beat:
+    build: .
+    image: *img
+    command: [celery, beat, --app=worker, --loglevel=INFO]
+    environment: *env
     depends_on:
-      - redis
-      - celery_queue
-  redis:
-    image: redis
-    ports:
-      - "127.0.0.1:6379:6379"
-#  stations_db:
-#    build:
-#      context: db_storage
-#      dockerfile: Dockerfile
-#    ports:
-#      - "127.0.0.1:5442:5432"
+      - rabbitmq
+    restart: 'no'
+    volumes:
+      - ./app:/app
+  rabbitmq:
+    image: rabbitmq:3.7.8
+volumes:
+  worker:
