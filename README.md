@@ -52,8 +52,7 @@ docker exec -it e2cdb31c2418 pytest /app/tests.py -vvv
 Rozwiązanie zostało zaimplementowane w oparciu o 3 kontenery:
  * Scheduler zadań - oparty na Celery Beat
  * Worker kolejki zadań - oparty na Celery
- * Baza kolejki zadań - wykorzystująca Rabbit
+ * Baza kolejki zadań - wykorzystująca Redis
  
 Do zmiany:
- * Brak zapisów z Celery Beat (testy chodzą)
  * dodać LINEMAN API

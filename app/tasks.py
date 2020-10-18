@@ -1,8 +1,33 @@
 import os
+import random
 from celery import states
 from celery.exceptions import Ignore
 
 from worker import celery_app
+
+STATIONS = [
+    "Warszawa Zachodnia",
+    "Warszawa Włochy",
+    "Warszawa Ursus",
+    "Warszawa Gołąbki",
+    "Ożarów Mazowiecki",
+    "Płochocin",
+    "Błonie",
+    "Witanów",
+    "Boża Wola",
+    "Seroki",
+    "Teresin Niepokalanów",
+    "Piasecznica",
+    "Sochaczew",
+    "Kornelin",
+    "Nowa Sucha",
+    "Kęszyce",
+    "Jasionna",
+    "Bednary",
+    "Mysłaków",
+    "Arkadia",
+    "Łowicz Główny"
+]
 
 
 def set_file_name_by_speed(speed):
@@ -14,8 +39,18 @@ def set_file_name_by_speed(speed):
     return file_name
 
 
+def get_train_speed():
+    return round(random.uniform(0, 180), 1)
+
+
+def get_near_station():
+    return random.choice(STATIONS)
+
+
 @celery_app.task(bind=True, name='post_train_speed', queue='train_beat')
-def post_train_speed(self, train_speed):
+def post_train_speed(self):
+    train_speed = get_train_speed()
+
     try:
         file_name = set_file_name_by_speed(train_speed)
         with open(os.path.join(os.environ['LOG_FILES_PATH'], file_name), "a") as file:
@@ -28,7 +63,8 @@ def post_train_speed(self, train_speed):
 
 
 @celery_app.task(bind=True, name='post_train_near_station', queue='train_beat')
-def post_train_near_station(self, station):
+def post_train_near_station(self):
+    station = get_near_station()
     return station
 
 
