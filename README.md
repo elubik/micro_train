@@ -17,14 +17,12 @@ LOG_FILES_PATH=~/micro_train/app/logfiles
 
 ## Usage
 
-[TBD] API Endpoints:
+API Endpoints:
 
 | Endpoint | Method | Params | Description |
 | -------- | ------ | ------ | ----------- |
-| /text | POST | url | Create a task for text grabbing |
-| /images | POST | url | Create a task for image grabbing |
-| /task | GET | task_id | Check status of created task |
-| /download | GET | task_id | Download task results |
+| /<station_name> | GET | n/a | Get barrier state |
+| /<station_name> | PUT | barrier_state | Set barrier state |
 
 
 ## Testing
@@ -39,7 +37,7 @@ e2cdb31c2418        worker                               "celery beat --app=w…
 af5c8d3eaed2        redis                                "docker-entrypoint.s…"   About an hour ago   Up About an hour    0.0.0.0:6379->6379/tcp   mikrotrain_redis_1
 ```
 
-[TBD] Run tests on LINEMAN API containter
+[TBD] Run tests on Lineman API containter
 ```bash
 docker exec -it b1437acf7ed3 pytest test_app.py -vvv
 ```
@@ -49,10 +47,11 @@ Run tests on Celery Worker containter
 docker exec -it e2cdb31c2418 pytest /app/tests.py -vvv
 ```
 ## Summary [PL]
-Rozwiązanie zostało zaimplementowane w oparciu o 3 kontenery:
+Rozwiązanie zostało zaimplementowane w oparciu o 4 kontenery:
  * Scheduler zadań - oparty na Celery Beat
  * Worker kolejki zadań - oparty na Celery
  * Baza kolejki zadań - wykorzystująca Redis
+ * API REST do zarządzania stanem szlabanu
  
 Do zmiany:
- * dodać LINEMAN API
+ * naprawić konfigurację Docker+Compose dla Lineman API 
