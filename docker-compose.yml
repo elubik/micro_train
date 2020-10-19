@@ -35,6 +35,7 @@ services:
     build:
       context: lineman_api
       dockerfile: Dockerfile
+    command: [gunicorn, --bin=0.0.0.0:5002, --workers=3, wsgi:lineman_app]
     ports:
       - "127.0.0.1:5002:5002"
     environment:

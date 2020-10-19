@@ -1,8 +1,9 @@
-FROM python
+FROM python:3.8.5
 
 COPY . /lineman_api
 WORKDIR /lineman_api
 
 RUN pip install -r requirements.txt
+
+# this is probably not needed here - to check
 EXPOSE 5002
-CMD ["gunicorn", "--bind", "0.0.0.0:5002", "--workers", "3", "app:lineman_api"]
