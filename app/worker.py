@@ -1,4 +1,4 @@
-from celery import Celery, states
+from celery import Celery
 from kombu import Queue
 from datetime import timedelta
 import os
@@ -25,7 +25,7 @@ celery_app.conf.beat_schedule = {
     "post-train-speed-every-10-seconds": {
         "task": "post_train_speed",
         "schedule": timedelta(seconds=int(os.environ['TRAIN_SPEED_SCHEDULE'])),
-        "args": [],  # [round(random.uniform(0, 180), 1)],
+        "args": [],
         "options": {
             "queue": "train_beat"
         }
@@ -33,7 +33,7 @@ celery_app.conf.beat_schedule = {
     "post-train-speed-every-180-seconds": {
         "task": "post_train_near_station",
         "schedule": timedelta(seconds=int(os.environ['STATIONS_SCHEDULE'])),
-        "args": [],  # [random.choice(STATIONS)],
+        "args": [],
         "options": {
             "queue": "train_beat"
         }

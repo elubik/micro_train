@@ -10,6 +10,8 @@ services:
       - TRAIN_SPEED_SCHEDULE=10
       - STATIONS_SCHEDULE=180
       - LOG_FILES_PATH=/app/logfiles
+      - HOST=localhost
+      - PORT=5002
     depends_on:
       - beat
       - redis
@@ -41,6 +43,5 @@ services:
     environment:
       - HOST=localhost
       - PORT=5002
-
 volumes:
   worker:

@@ -75,7 +75,7 @@ class StationBarrier(Resource):
                         }}
             else:
                 return {'Response': 'OK',
-                        'Message': 'No record'}
+                        'Message': {'empty': 'No record'}}
         else:
             return {'Response': 'ERROR',
                     'Message': 'Incorrect param'}
