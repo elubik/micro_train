@@ -54,4 +54,5 @@ Rozwiązanie zostało zaimplementowane w oparciu o 4 kontenery:
  * API REST do zarządzania stanem szlabanu
  
 Do zmiany:
- * naprawić konfigurację Docker+Compose dla Lineman API 
+ * dodać wywołania API w celery workers
+ * dodać moduł logging
