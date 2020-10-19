@@ -1,41 +1,46 @@
-version: "3"
-volumes:
-  tmp-shared:
+version: '3.4'
 services:
-#  lineman_api:
-#    build:
-#      context: lineman_api
-#      dockerfile: Dockerfile
-#    ports:
-#     - "5002:5002"
-#    depends_on:
-#      - redis
-  celery_queue:
-    build:
-      context: celery_queue
-      dockerfile: Dockerfile
+  worker:
+    build: .
+    image: &img worker
+    command: [celery, worker, --app=worker.celery_app, --pool=gevent, --concurrency=20, --loglevel=INFO]
+    environment: &env
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - TRAIN_SPEED_SCHEDULE=10
+      - STATIONS_SCHEDULE=180
+      - LOG_FILES_PATH=/app/logfiles
+    depends_on:
+      - beat
+      - redis
+    restart: 'no'
     volumes:
-      - tmp-shared:/tmp
+      - ./app:/app
+      - worker:/app/logfiles
+  beat:
+    build: .
+    image: *img
+    command: [celery, beat, --app=worker.celery_app, --loglevel=INFO]
+    environment: *env
     depends_on:
       - redis
-  celery_train:
-    build:
-      context: celery_train
-      dockerfile: Dockerfile
+    restart: 'no'
     volumes:
-      - tmp-shared:/tmp
-    environment:
-      - PYTHONPATH="$PYTHONPATH:/celery_queue"
-    depends_on:
-      - redis
-      - celery_queue
+      - ./app:/app
   redis:
     image: redis
     ports:
       - "127.0.0.1:6379:6379"
-#  stations_db:
-#    build:
-#      context: db_storage
-#      dockerfile: Dockerfile
-#    ports:
-#      - "127.0.0.1:5442:5432"
+  lineman_api:
+    build:
+      context: lineman_api
+      dockerfile: Dockerfile
+    command: [gunicorn, --bin=0.0.0.0:5002, --workers=3, wsgi:lineman_app]
+    ports:
+      - "127.0.0.1:5002:5002"
+    environment:
+      - HOST=localhost
+      - PORT=5002
+
+volumes:
+  worker:
