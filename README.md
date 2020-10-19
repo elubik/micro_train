@@ -37,9 +37,9 @@ e2cdb31c2418        worker                               "celery beat --app=w…
 af5c8d3eaed2        redis                                "docker-entrypoint.s…"   About an hour ago   Up About an hour    0.0.0.0:6379->6379/tcp   mikrotrain_redis_1
 ```
 
-[TBD] Run tests on Lineman API containter
+Run tests on Lineman API containter
 ```bash
-docker exec -it b1437acf7ed3 pytest test_app.py -vvv
+docker exec -it b1437acf7ed3 pytest /lineman_api/tests_api.py -vvv
 ```
 
 Run tests on Celery Worker containter
@@ -54,5 +54,4 @@ Rozwiązanie zostało zaimplementowane w oparciu o 4 kontenery:
  * API REST do zarządzania stanem szlabanu
  
 Do zmiany:
- * dodać wywołania API w celery workers
- * dodać moduł logging
+ * refactor
