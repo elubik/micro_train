@@ -1,4 +1,3 @@
-from api import lineman_app
+from api import create_app
 
-if __name__ == "__main__":
-    lineman_app.run()
+app = create_app()
