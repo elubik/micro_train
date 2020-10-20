@@ -13,7 +13,6 @@ services:
       - HOST=10.5.0.103
       - PORT=5002
     depends_on:
-      - beat
       - redis
     restart: 'no'
     volumes:
@@ -29,6 +28,7 @@ services:
     environment: *env
     depends_on:
       - redis
+      - worker
     restart: 'no'
     volumes:
       - ./app:/app
@@ -46,12 +46,13 @@ services:
     build:
       context: lineman_api
       dockerfile: Dockerfile
-    command: [gunicorn, --bin=10.5.0.103:5002, --workers=3, wsgi:lineman_app]
+    command: [gunicorn, --bind=10.5.0.103:5002, --workers=3, wsgi:app]
     ports:
       - "127.0.0.1:5002:5002"
     environment:
       - HOST=10.5.0.103
       - PORT=5002
+      - SQLALCHEMY_DATABASE_URI=sqlite:////tmp/test.db
     networks:
       vpcbr:
         ipv4_address: 10.5.0.103
