@@ -1,17 +1,8 @@
-import os
 from datetime import datetime
-from flask_restful import Resource, Api, reqparse
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Resource, reqparse
 from sqlalchemy import exc
 
-lineman_app = Flask(__name__)
-lineman_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db = SQLAlchemy(lineman_app)
-lineman_api = Api(lineman_app)
-
-HOST = os.environ.get('HOST', 'localhost')
-PORT = os.environ.get('PORT', 5002)
+from lineman_api import db, lineman_api
 
 
 class Station(db.Model):
@@ -22,9 +13,6 @@ class Station(db.Model):
 
     def __repr__(self):
         return '<Station %r>' % self.name
-
-
-db.create_all()
 
 
 def save_barrier_state(name, state):
@@ -90,5 +78,5 @@ class Home(Resource):
 lineman_api.add_resource(StationBarrier, '/<station_name>')
 lineman_api.add_resource(Home, '/')
 
-if __name__ == '__main__':
-    lineman_app.run(port=str(PORT), debug=True)
+# if __name__ == '__main__':
+#     lineman_app.run(port=str(PORT), debug=True)

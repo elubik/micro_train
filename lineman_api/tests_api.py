@@ -1,5 +1,8 @@
 import requests
-from api import lineman_app, db, save_barrier_state, get_barrier_state, Station, HOST, PORT
+from lineman_api.api import save_barrier_state, get_barrier_state, Station
+from lineman_api.config import HOST, PORT
+
+from lineman_api import db
 
 
 class TestDatabase:

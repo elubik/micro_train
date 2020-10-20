@@ -44,14 +44,11 @@ docker exec -it b1437acf7ed3 pytest /lineman_api/tests_api.py -vvv
 
 Run tests on Celery Worker containter
 ```bash
-docker exec -it e2cdb31c2418 pytest /app/tests.py -vvv
+docker exec -it e2cdb31c2418 pytest /app/tests_tasks.py -vvv
 ```
 ## Summary [PL]
 Rozwiązanie zostało zaimplementowane w oparciu o 4 kontenery:
  * Scheduler zadań - oparty na Celery Beat
  * Worker kolejki zadań - oparty na Celery
  * Baza kolejki zadań - wykorzystująca Redis
- * API REST do zarządzania stanem szlabanu
- 
-Do zmiany:
- * refactor
+ * API REST do zarządzania stanem szlabanu - Flask
