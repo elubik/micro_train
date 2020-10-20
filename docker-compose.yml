@@ -10,7 +10,7 @@ services:
       - TRAIN_SPEED_SCHEDULE=10
       - STATIONS_SCHEDULE=180
       - LOG_FILES_PATH=/app/logfiles
-      - HOST=localhost
+      - HOST=10.5.0.103
       - PORT=5002
     depends_on:
       - beat
@@ -19,6 +19,9 @@ services:
     volumes:
       - ./app:/app
       - worker:/app/logfiles
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.100
   beat:
     build: .
     image: *img
@@ -29,19 +32,34 @@ services:
     restart: 'no'
     volumes:
       - ./app:/app
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.101
   redis:
     image: redis
     ports:
       - "127.0.0.1:6379:6379"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.102
   lineman_api:
     build:
       context: lineman_api
       dockerfile: Dockerfile
-    command: [gunicorn, --bin=0.0.0.0:5002, --workers=3, wsgi:lineman_app]
+    command: [gunicorn, --bin=10.5.0.103:5002, --workers=3, wsgi:lineman_app]
     ports:
       - "127.0.0.1:5002:5002"
     environment:
-      - HOST=localhost
+      - HOST=10.5.0.103
       - PORT=5002
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.103
 volumes:
   worker:
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
