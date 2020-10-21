@@ -27,7 +27,7 @@ STATIONS = [
 ]
 
 
-def set_logger(name):
+def set_logger(name: str) -> logging:
     logger = logging.getLogger(name)
     fh = logging.FileHandler(os.path.join(os.environ['LOG_FILES_PATH'], name + '.log'))
     fh.setLevel(logging.INFO)
@@ -38,7 +38,7 @@ def set_logger(name):
     return logger
 
 
-def set_file_name_by_speed(speed):
+def set_file_name_by_speed(speed: float) -> str:
     speed_limit_slow = 40
     speed_limit_normal = 140
 
@@ -50,9 +50,9 @@ def set_file_name_by_speed(speed):
     return file_name
 
 
-def get_train_speed():
+def get_train_speed() -> float:
     return round(random.uniform(0, 180), 1)
 
 
-def get_near_station():
+def get_near_station() -> str:
     return random.choice(STATIONS)
