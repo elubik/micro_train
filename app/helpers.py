@@ -23,15 +23,15 @@ STATIONS = [
     "Bednary",
     "Mysłaków",
     "Arkadia",
-    "Łowicz Główny"
+    "Łowicz Główny",
 ]
 
 
 def set_logger(name: str) -> logging:
     logger = logging.getLogger(name)
-    fh = logging.FileHandler(os.path.join(os.environ['LOG_FILES_PATH'], name + '.log'))
+    fh = logging.FileHandler(os.path.join(os.environ["LOG_FILES_PATH"], name + ".log"))
     fh.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s, %(name)s %(levelname)s %(message)s')
+    formatter = logging.Formatter("%(asctime)s, %(name)s %(levelname)s %(message)s")
     fh.setFormatter(formatter)
     logger.addHandler(fh)
     logger.setLevel(logging.INFO)

@@ -2,8 +2,8 @@ import requests
 import logging
 import os
 
-HOST = os.environ.get('HOST', 'localhost')
-PORT = os.environ.get('PORT', 5002)
+HOST = os.environ.get("HOST", "localhost")
+PORT = os.environ.get("PORT", 5002)
 
 
 def handle_result(result, logger):
@@ -16,14 +16,14 @@ def handle_result(result, logger):
 
 
 def raise_exception(exception, logger):
-    message = f'Sorry, requests.get() crashed during execution.\n{exception}'
+    message = f"Sorry, requests.get() crashed during execution.\n{exception}"
     logger.error(message)
     raise Exception(message)
 
 
 def barrier_get(station_name: str, logger: logging) -> dict:
     try:
-        result = requests.get(f'http://{HOST}:{PORT}/{station_name}')
+        result = requests.get(f"http://{HOST}:{PORT}/{station_name}")
         return handle_result(result, logger)
 
     except Exception as ex:
@@ -32,7 +32,7 @@ def barrier_get(station_name: str, logger: logging) -> dict:
 
 def barrier_post(station_name: str, data: dict, logger: logging) -> None:
     try:
-        result = requests.put(f'http://{HOST}:{PORT}/{station_name}', data=data)
+        result = requests.put(f"http://{HOST}:{PORT}/{station_name}", data=data)
         return handle_result(result, logger)
 
     except Exception as ex:
